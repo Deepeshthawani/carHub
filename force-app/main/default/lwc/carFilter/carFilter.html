@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Filters" icon-name="standard:calibration">
+        <div class="slds-m-horizontal_medium">
+            <lightning-input 
+              type="search"
+              label="Search key"
+              value={filters.searchKey}
+              onchange={handleSearchKeyChange}
+            ></lightning-input>
+            <section class="slider_section">
+                <lightning-slider 
+                  label="Max Price" 
+                  max="999999"
+                  min="0"
+                  size=" "
+                  step="100"
+                  type="horizontal"
+                  value={filters.maxPrice}
+                  variant="standard"
+                  onchange={handleMaxPriceChange}
+                ></lightning-slider>
+            </section>
+        </div>
+    </lightning-card>
+</template>
