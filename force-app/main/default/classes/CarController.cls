@@ -15,9 +15,12 @@ public with sharing class CarController {
 
     @AuraEnabled(Cacheable=true)
     public static List<Car__c> getCars(Filters filters){
-        String key, whereClause='';
+        String key;
+        String whereClause='';
         Decimal maxPrice;
-        String[] categories, makeType, criteria = new List<String>{};
+        String[] categories;
+        String[] makeType;
+        String[] criteria = new List<String>{};
         if(filters != null){
             maxPrice = filters.maxPrice;
             categories = filters.categories;
