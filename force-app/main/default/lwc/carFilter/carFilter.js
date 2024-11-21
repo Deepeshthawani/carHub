@@ -8,6 +8,10 @@ import MAKE_FIELD from '@salesforce/schema/Car__c.Make__c';
 //constants
 const CATEGORY_ERROR = 'Error loading categories'
 const MAKE_ERROR = 'Error loading make types'
+// Lightning Message Service and a message channel
+import {MessageContext, publish} from 'lightning/messageService';
+import CARS_FILTERED_MESSAGE from '@salesforce/messageChannel/CarsFiltered__c';
+/* https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.reference_salesforce_modules */
 
 export default class CarFilter extends LightningElement {
     filters={
@@ -16,6 +20,11 @@ export default class CarFilter extends LightningElement {
     }
     categoryError=CATEGORY_ERROR
     makeError = MAKE_ERROR
+
+    /**Load Context for LMS */
+    @wire(MessageContext)
+    messageContext
+
     /***fetching Category picklist */
     @wire(getObjectInfo , {objectApiName:CAR_OBJECT})
     carObjectInfo
@@ -34,16 +43,25 @@ export default class CarFilter extends LightningElement {
     handleSearchKeyChange(event){
         console.log(event.target.value);
         this.filters = {...this.filters, "searchKey":event.target.value}
+        this.sendDataToCarList()
     }
     /**Price range handler */
     handleMaxPriceChange(event){
         console.log(event.target.value);
         this.filters = {...this.filters, "maxPrice":event.target.value}
+        this.sendDataToCarList()
+
     }
 
     handleCheckbox(event){
         const {name, value} = event.target.dataset
         console.log("name",name);
         console.log("value",value);
+    }
+
+    sendDataToCarList(){
+        publish(this.messageContext, CARS_FILTERED_MESSAGE, {
+            filters:this.filters
+        })
     }
 }
