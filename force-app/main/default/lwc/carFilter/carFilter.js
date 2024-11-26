@@ -20,6 +20,7 @@ export default class CarFilter extends LightningElement {
     }
     categoryError=CATEGORY_ERROR
     makeError = MAKE_ERROR
+    timer
 
     /**Load Context for LMS */
     @wire(MessageContext)
@@ -54,14 +55,31 @@ export default class CarFilter extends LightningElement {
     }
 
     handleCheckbox(event){
+        if(!this.filters.categories){
+            const categories = this.categories.data.values.map(item=>item.value)
+            const makeType = this.makeType.data.values.map(item=>item.value)
+            this.filters = {...this.filters, categories, makeType}
+
+        }
         const {name, value} = event.target.dataset
-        console.log("name",name);
-        console.log("value",value);
+        // console.log("name",name);
+        // console.log("value",value);
+        if(event.target.checked){
+            if(!this.filters[name].includes(value)){
+                this.filters[name] = [...this.filters[name],value]
+            }
+        } else{
+            this.filters[name] = this.filters[name].filter(item=>item !==value)
+        }
+        this.sendDataToCarList()
     }
 
     sendDataToCarList(){
-        publish(this.messageContext, CARS_FILTERED_MESSAGE, {
-            filters:this.filters
-        })
+        window.clearTimeout(this.timer)
+        this.timer = window.setTimeout(()=>{
+            publish(this.messageContext, CARS_FILTERED_MESSAGE, {
+                filters:this.filters
+            })
+        },400) 
     }
 }

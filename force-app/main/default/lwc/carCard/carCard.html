@@ -1,7 +1,8 @@
 <template>
     <lightning-card title={carName} icon-name="standard:apex_plugin">
+      <template if:true={recordId}>
         <div class="slds-m-horizontal_medium">
-            <img src={carPictureURL} alt="Car Picture"/>
+          <img src={carPictureURL} alt="Car Picture"/>
             <lightning-record-view-form
               object-api-name={objectApiName}
               record-id={recordId}
@@ -17,5 +18,9 @@
               <lightning-output-field field-name={controlField}></lightning-output-field>
             </lightning-record-view-form>
         </div>
+      </template>
+      <template if:false={recordId}>
+        <p>Select a Car to see details</p>
+      </template>
     </lightning-card>
 </template>
