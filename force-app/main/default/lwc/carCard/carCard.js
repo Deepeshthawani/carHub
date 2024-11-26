@@ -1,4 +1,7 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, wire } from 'lwc';
+//lightning message service
+import CAR_SELECTED_MESSAGE from '@salesforce/messageChannel/CarSelected__c';
+import {MessageContext, subscribe,unsubscribe} from 'lightning/messageService';
 
 //Car__c Schema
 import NAME_FIELD from '@salesforce/schema/Car__c.Name'
@@ -14,6 +17,10 @@ import { getFieldValue } from 'lightning/uiRecordApi';
 
 
 export default class CarCard extends LightningElement {
+
+    /// load content for LMS
+    @wire(MessageContext)
+    messageContext
     //exposing fields to make them available in template
     categoryField = CATEGORY_FIELD
     makeField = MAKE_FIELD
@@ -22,11 +29,15 @@ export default class CarCard extends LightningElement {
     seatsField = SEATS_FIELD
     controlField = CONTROL_FIELD
 
-    recordId = 'a0PGA00000TbqGo2AJ'
+    recordId
     objectApiName = CAR_OBJECT
 
     carName
     carPictureURL
+
+    //subscription reference for carSelected
+    carSelectionSubscription
+
     handleRecordLoaded(event){
         const {records} = event.detail
         const recordData = records[this.recordId]
@@ -35,4 +46,21 @@ export default class CarCard extends LightningElement {
 
     }
 
+    connectedCallback(){
+        this.subscribeHandler()
+    }
+
+    subscribeHandler(){
+        this.carSelectionSubscription = subscribe(this.messageContext,CAR_SELECTED_MESSAGE, (message)=>this.handleCarSelected(message))
+    }
+
+    handleCarSelected(message){
+        this.recordId = message.carId
+
+    }
+
+    disconnectedCallback(){
+        unsubscribe(this.carSelectionSubscription)
+        this.carSelectionSubscription = null
+    }
 }
