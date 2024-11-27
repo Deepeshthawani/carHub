@@ -5,5 +5,7 @@
     <masterLabel>Car filter component</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
+        <target>lightning__GlobalAction</target>
+        <target>lightning__RecordAction</target>
     </targets>
-</LightningComponentBundle>
+</LightningComponentBundle> 
