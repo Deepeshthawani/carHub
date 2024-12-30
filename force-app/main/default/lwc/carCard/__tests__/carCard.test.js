@@ -1,4 +1,4 @@
-import { createElement } from 'lwc';
+import { createElement } from '@lwc/engine-dom';
 import CarCard from 'c/carCard';
 
 describe('c-car-card', () => {

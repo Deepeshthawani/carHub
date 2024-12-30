@@ -1,4 +1,4 @@
-import { createElement } from 'lwc';
+import { createElement } from '@lwc/engine-dom';
 import SimilarCars from 'c/similarCars';
 
 describe('c-similar-cars', () => {
