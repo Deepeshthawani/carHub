@@ -47,4 +47,12 @@ public with sharing class CarController {
         System.debug(query);
         return Database.query(query);
     }
+
+    @AuraEnabled(cacheable=true)
+    public static Car__c[] getSimilarCars(Id carId, String[] makeType){
+        return [Select Id,Name,MSRP__c,Description__c,Category__c,Picture_URL__c,Make__c from Car__c where Make__c in :makeType AND Id != :carId];
+    }
+
+
+
 }

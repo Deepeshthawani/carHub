@@ -1,4 +1,4 @@
-import { createElement } from 'lwc';
+import { createElement } from '@lwc/engine-dom';
 import PlaceHolder from 'c/placeHolder';
 
 describe('c-place-holder', () => {
